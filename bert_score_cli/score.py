@@ -128,6 +128,8 @@ def main():
         for p, r, f in zip(ps, rs, fs):
             print("{:.6f}\t{:.6f}\t{:.6f}".format(p, r, f))
 
+    return P, R, F1
+
 
 if __name__ == "__main__":
     main()

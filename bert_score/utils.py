@@ -38,6 +38,7 @@ lang2model.update(
 
 
 model2layers = {
+    "microsoft/codereviewer": 11,  # add for codereviewer model
     "bert-base-uncased": 9,  # 0.6925188074454226
     "bert-large-uncased": 18,  # 0.7210358126642836
     "bert-base-cased-finetuned-mrpc": 9,  # 0.6721947475618048
@@ -251,6 +252,12 @@ def get_model(model_type, num_layers, all_layers=None):
         from transformers import T5EncoderModel
 
         model = T5EncoderModel.from_pretrained(model_type)
+    ### add the codereviewer model
+    elif "codereviewer" in model_type:
+        from transformers import AutoModelForSeq2SeqLM
+        
+        # tokenizer = AutoTokenizer.from_pretrained(model_type)
+        model = AutoModelForSeq2SeqLM.from_pretrained(model_type)
     else:
         model = AutoModel.from_pretrained(model_type)
     model.eval()
@@ -292,6 +299,14 @@ def get_model(model_type, num_layers, all_layers=None):
                 model.encoder.layer = torch.nn.ModuleList(
                     [layer for layer in model.encoder.layer[:num_layers]]
                 )
+        elif hasattr(model, "block"):  # codereviewer
+            assert (
+                0 <= num_layers <= len(model.block)
+            ), f"Invalid num_layers: num_layers should be between 0 and {len(model.block)} for {model_type}"
+            model.block = torch.nn.ModuleList(
+                [layer for layer in model.block[:num_layers]]
+            )
+        
         elif hasattr(model, "transformer"):  # bert, roberta
             assert (
                 0 <= num_layers <= len(model.transformer.layer)

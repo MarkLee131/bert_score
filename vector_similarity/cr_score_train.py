@@ -5,7 +5,8 @@ import torch
 import bert_score
 from configs import *
 
-os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+os.environ['CUDA_VISIBLE_DEVICES'] = '2'
+
 batch_size=400
 torch.multiprocessing.set_sharing_strategy("file_system")
 
@@ -26,7 +27,7 @@ def get_cr_score(desc_tokens:list, commit_tokens:list):
 
 if __name__ == '__main__':
     
-    files = [test_file]
+    files = [train_file] 
     
     for file in files:
         

@@ -17,7 +17,6 @@ def get_cr_score(desc_tokens:list, commit_tokens:list):
         model_type='microsoft/codereviewer',
         return_hash=False,
         batch_size=batch_size,
-        # verbose=True,
         nthreads=20
     )
     

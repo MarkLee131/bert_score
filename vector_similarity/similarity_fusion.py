@@ -6,12 +6,12 @@ import pandas as pd
 from tqdm import tqdm
 
 DATA_DIR = '/mnt/local/Baselines_Bugs/PatchSleuth/TF-IDF'
-# SAVE_DIR = '/mnt/local/Baselines_Bugs/CR_score/evaluate/fusion'
+SAVE_DIR = '/mnt/local/Baselines_Bugs/CR_score/evaluate/fusion'
 # SAVE_DIR = '/mnt/local/Baselines_Bugs/CR_score/evaluate/fusion_unnormalized'
-SAVE_DIR = '/mnt/local/Baselines_Bugs/CR_score/evaluate/fusion_weighted/0.4_0.6' ## 0.4 for CR_score, 0.6 for TF-IDF_score
-SAVE_DIR = '/mnt/local/Baselines_Bugs/CR_score/evaluate/fusion_weighted/0.6_0.4' ## 0.6 for CR_score, 0.4 for TF-IDF_score
-SAVE_DIR = '/mnt/local/Baselines_Bugs/CR_score/evaluate/fusion_weighted/0.3_0.7' ## 0.3 for CR_score, 0.7 for TF-IDF_score
-SAVE_DIR = '/mnt/local/Baselines_Bugs/CR_score/evaluate/fusion_weighted/0.45_0.55' ## 0.45 for CR_score, 0.55 for TF-IDF_score
+# SAVE_DIR = '/mnt/local/Baselines_Bugs/CR_score/evaluate/fusion_weighted/0.4_0.6' ## 0.4 for CR_score, 0.6 for TF-IDF_score
+# SAVE_DIR = '/mnt/local/Baselines_Bugs/CR_score/evaluate/fusion_weighted/0.6_0.4' ## 0.6 for CR_score, 0.4 for TF-IDF_score
+# SAVE_DIR = '/mnt/local/Baselines_Bugs/CR_score/evaluate/fusion_weighted/0.3_0.7' ## 0.3 for CR_score, 0.7 for TF-IDF_score
+# SAVE_DIR = '/mnt/local/Baselines_Bugs/CR_score/evaluate/fusion_weighted/0.45_0.55' ## 0.45 for CR_score, 0.55 for TF-IDF_score
 
 os.makedirs(SAVE_DIR, exist_ok=True)
 

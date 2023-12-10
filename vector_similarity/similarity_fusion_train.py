@@ -1,13 +1,16 @@
 '''
 Try to fuse the similarity of CR_score and TF-IDF_score and then calculate the recall, MRR and manual efforts
+(Only for training set)
+
 '''
 import os
 import pandas as pd
 from tqdm import tqdm
 
 DATA_DIR = '/mnt/local/Baselines_Bugs/PatchSleuth/TF-IDF'
-# SAVE_DIR = '/mnt/local/Baselines_Bugs/CR_score/evaluate/fusion'
-SAVE_DIR = '/mnt/local/Baselines_Bugs/CR_score/evaluate/fusion_unnormalized'
+SAVE_DIR = '/mnt/local/Baselines_Bugs/CR_score/evaluate/training_set/fusion_unormalized'
+### we found that unnormalized TFIDF is better than normalized.
+
 # SAVE_DIR = '/mnt/local/Baselines_Bugs/CR_score/evaluate/fusion_weighted/0.4_0.6' ## 0.4 for CR_score, 0.6 for TF-IDF_score
 # SAVE_DIR = '/mnt/local/Baselines_Bugs/CR_score/evaluate/fusion_weighted/0.6_0.4' ## 0.6 for CR_score, 0.4 for TF-IDF_score
 # SAVE_DIR = '/mnt/local/Baselines_Bugs/CR_score/evaluate/fusion_weighted/0.3_0.7' ## 0.3 for CR_score, 0.7 for TF-IDF_score
@@ -60,67 +63,42 @@ def manual_efforts(metric, k_list=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 50, 10
         manual_efforts_info_iter = pd.DataFrame([[k, manual_efforts]], columns=['Top@k', 'manual_efforts'])
         manual_efforts_info_iter.to_csv(save_path, mode='a', header=False, index=False)
 
-def normalized_tfidf(tfidf_data):
-    '''
-    normalize the similarity scores of TF-IDF to [0, 1] and save into a new column named `similarity_normalized`
-    '''
-    ## group by cve
-    test_cve = tfidf_data.groupby('cve')
-    
-    for cve, group in tqdm(test_cve, desc='normalize the similarity scores of TF-IDF to [0, 1]'):
-        # first sort the rows according to the similarity score
-        group = group.sort_values(by='similarity', ascending=False)
-        similarity_scores = group['similarity'].tolist()
-        max_score = max(similarity_scores)
-        min_score = min(similarity_scores)
-        normalized_scores = [(score - min_score) / (max_score - min_score) for score in similarity_scores]
-        tfidf_data.loc[group.index, 'similarity_normalized'] = normalized_scores
-        
-    return tfidf_data
-    
-    
 
 if __name__ == "__main__":
     
-    ### we evaluate the performance of CR_score and TF-IDF_score on test data first.
+    ### we evaluate the performance of CR_score and TF-IDF_score on the training set
     ## columns are: cve,owner,repo,commit_id,similarity,label
 
     ### read tfidf similarity data
     print("Step 1/4: read the similarity data")
-    tfidf_data = pd.read_csv(os.path.join(DATA_DIR, 'test_data_TFIDF.csv'))
+    tfidf_data = pd.read_csv(os.path.join(DATA_DIR, 'similarity_data_TFIDF.csv'))
 
-    test_crscore = pd.read_csv('/mnt/local/Baselines_Bugs/CR_score/output/crscore_test_data.csv')
-    test_crscore.drop(['desc_token', 'msg_token', 'diff_token'], axis=1, inplace=True)
+    #### we need to read the four files of CR_score and then merge them into one dataframe
+    training_dir = '/mnt/local/Baselines_Bugs/PatchSleuth/data/cr_score'
     
-    ### we need to normalize the similarity scores of TF-IDF to [0, 1]
-    print("Step 2/4: normalize the similarity scores of TF-IDF to [0, 1]")
-    # tfidf_data = normalized_tfidf(tfidf_data)
+    ## columns are cve,owner,repo,commit_id,label,desc_token,msg_token,diff_token,Recall,Precision,F1
+    training_crscore = pd.DataFrame(columns=['cve', 'owner', 'repo', 'commit_id', 'label', 'desc_token', 'msg_token', 'diff_token', 'Recall', 'Precision', 'F1'])
+    for file in tqdm(os.listdir(training_dir), desc='read cr_score data', total=4):
+        tmp_df = pd.read_csv(os.path.join(training_dir, file))
+        training_crscore = pd.concat([training_crscore, tmp_df], ignore_index=True)
+
+    print('training_crscore shape: {}'.format(training_crscore.shape))
     
-    # tfidf_data.drop(['similarity'], axis=1, inplace=True)
-    
+    training_crscore.drop(['desc_token', 'msg_token', 'diff_token'], axis=1, inplace=True)
+
     
     ### merge the two dataframes
-    print("Step 3/4: merge the two dataframes")
-    fusion_df = pd.merge(tfidf_data, test_crscore, on=['cve', 'owner', 'repo', 'commit_id', 'label'], how='left')
+    print("Step 2/3: merge the two dataframes")
+    fusion_df = pd.merge(tfidf_data, training_crscore, on=['cve', 'owner', 'repo', 'commit_id', 'label'], how='right')
     
+    print('fusion_df shape: {}'.format(fusion_df.shape))
     # ### calculate the average similarity score of patch commit for each cve for each metric and save into
     # ### a three new columns named `fused_recall`, `fused_precision` and `fused_f1`
     
-    ### normalized
-    # fusion_df['fused_recall'] = (fusion_df['Recall'] + fusion_df['similarity_normalized']) / 2
-    # fusion_df['fused_precision'] = (fusion_df['Precision'] + fusion_df['similarity_normalized']) / 2
-    # fusion_df['fused_f1'] = (fusion_df['F1'] + fusion_df['similarity_normalized']) / 2
-    
-    
-    # #### unnormalized
-    # fusion_df['fused_recall'] = (fusion_df['Recall'] + fusion_df['similarity']) / 2
-    # fusion_df['fused_precision'] = (fusion_df['Precision'] + fusion_df['similarity']) / 2
-    # fusion_df['fused_f1'] = (fusion_df['F1'] + fusion_df['similarity']) / 2
-    
-    ### weighted, and the weight for CR_score is 0.45
-    fusion_df['fused_recall'] = (fusion_df['Recall'] * 0.45 + fusion_df['similarity'] * 0.55)
-    fusion_df['fused_precision'] = (fusion_df['Precision'] * 0.45 + fusion_df['similarity'] * 0.55)
-    fusion_df['fused_f1'] = (fusion_df['F1'] * 0.45 + fusion_df['similarity'] * 0.55)
+    #### unnormalized
+    fusion_df['fused_recall'] = (fusion_df['Recall'] + fusion_df['similarity']) / 2
+    fusion_df['fused_precision'] = (fusion_df['Precision'] + fusion_df['similarity']) / 2
+    fusion_df['fused_f1'] = (fusion_df['F1'] + fusion_df['similarity']) / 2
     
     
     test_cve = fusion_df.groupby('cve')
@@ -157,5 +135,3 @@ if __name__ == "__main__":
         recall(metric, save_path=os.path.join(SAVE_DIR, f'recall_{metric}.csv'))
         mrr(metric, save_path=os.path.join(SAVE_DIR, f'MRR_{metric}.csv'))
         manual_efforts(metric, save_path=os.path.join(SAVE_DIR, f'manualefforts_{metric}.csv'))
-
-

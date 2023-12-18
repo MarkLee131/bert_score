@@ -2,10 +2,10 @@ import os
 import pandas as pd
 from tqdm import tqdm
 
-train_file =  '/mnt/local/kaixuan_cuda11/Baselines_Bugs/PatchSleuth/data/train_data.csv'
+train_file =  '/mnt/local/anonymous_cuda11/Baselines_Bugs/PatchSleuth/data/train_data.csv'
 
 # Function to split train data into four parts
-def split_train_data(train_file, save_dir='/mnt/local/kaixuan/train_split', num_splits=4):
+def split_train_data(train_file, save_dir='/mnt/local/anonymous/train_split', num_splits=4):
     # Create directory if it doesn't exist
     os.makedirs(save_dir, exist_ok=True)
 

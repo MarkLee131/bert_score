@@ -26,7 +26,7 @@ def get_cr_score(desc_tokens:list, commit_tokens:list):
 
 if __name__ == '__main__':
     
-    file = '/mnt/local/kaixuan/train_split/train_data_part_2.csv'
+    file = '/mnt/local/anonymous/train_split/train_data_part_2.csv'
     file_name = file.split('/')[-1]
     
     print('Loading data...')

@@ -27,10 +27,8 @@ and you can use it as a python module.
 
 #### Using Python Function:
 
-On a high level, we provide a python function `cr_score.score` and a python object `cr_score.CRScorer`.
-The function provides all the supported features while the scorer object caches the BERT model to faciliate multiple evaluations.
-Check our [demo](./example/Demo.ipynb) to see how to use these two interfaces. 
-Please refer to [`cr_score/score.py`](./cr_score/score.py) for implementation details.
+On a high level, we provide a python function `cr_score.score`. 
+Please refer to [`cr_score/score.py`](./bert_score/score.py) for implementation details.
 
 
 

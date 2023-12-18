@@ -2,7 +2,7 @@ import pytz
 from datetime import datetime
 import os
 
-cr_save_dir='/mnt/local/kaixuan/output'
+cr_save_dir='/mnt/local/anonymous/output'
 os.makedirs(cr_save_dir, exist_ok=True)
 
 def get_singapore_time():

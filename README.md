@@ -1,4 +1,4 @@
-# Semantic-based Retriever for Security Patch Tracing
+v# Semantic-based Retriever for Security Patch Tracing
 
 PatchFinder's Semantic-based Retriever is an innovative component designed specifically for linking CVE descriptions with their corresponding patches in code repositories. It stands as a key feature in the PatchFinder tool, enhancing the accuracy and efficiency of security patch tracing in open-source software.
 
@@ -73,7 +73,7 @@ The figure will be saved to out.png.
 
 ### Acknowledgements
 
-This repo wouldn't be possible without the awesome [BertScore](https://github.com/Tiiiger/cr_score), [CodeReviewer](https://huggingface.co/microsoft/codereviewer), [fairseq](https://github.com/pytorch/fairseq), and [transformers](https://github.com/huggingface/transformers).
+This repo wouldn't be possible without the awesome [BertScore](https://github.com/Tiiiger/bert_score), [CodeReviewer](https://huggingface.co/microsoft/codereviewer), [fairseq](https://github.com/pytorch/fairseq), and [transformers](https://github.com/huggingface/transformers).
 
 
 

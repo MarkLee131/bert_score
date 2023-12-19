@@ -71,7 +71,7 @@ The figure will be saved to out.png.
 
 ### Acknowledgements
 
-This repo wouldn't be possible without the awesome [BertScore](https://github.com/Tiiiger/cr_score), [CodeReviewer](https://huggingface.co/microsoft/codereviewer), [fairseq](https://github.com/pytorch/fairseq), and [transformers](https://github.com/huggingface/transformers).
+This repo wouldn't be possible without the awesome [BertScore](https://github.com/Tiiiger/bert_score), [CodeReviewer](https://huggingface.co/microsoft/codereviewer), [fairseq](https://github.com/pytorch/fairseq), and [transformers](https://github.com/huggingface/transformers).
 
 
 

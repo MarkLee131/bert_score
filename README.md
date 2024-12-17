@@ -1,4 +1,12 @@
-# Semantic-based Retriever for Security Patch Tracing
+# Semantic-based Retriever for Security Patch Tracing [![arXiv](https://img.shields.io/badge/arXiv-<2407.17065>-<COLOR>.svg)](https://arxiv.org/abs/2407.17065) [![Visit Our Website](https://img.shields.io/badge/Google_Site-_PatchFinder-blue)](https://sites.google.com/view/issta2024-patchfinder/home) [![](https://img.shields.io/badge/ISSTA-2024-blue?style=flat-square)](https://2024.issta.org/)
+
+
+> [!IMPORTANT]
+>
+> This repo is a *semantic-based retriever*, a key component within our tool [PatchFinder](https://github.com/MarkLee131/PatchFinder) published at ISSTA 2024 ([*****PatchFinder: A Two-Phase Approach to Security Patch Tracing for Disclosed Vulnerabilities in Open Source Software*****](https://dl.acm.org/doi/10.1145/3650212.3680305)) 
+
+
+
 
 PatchFinder's Semantic-based Retriever is an innovative component designed specifically for linking CVE descriptions with their corresponding patches in code repositories. It stands as a key feature in the PatchFinder tool, enhancing the accuracy and efficiency of security patch tracing in open-source software.
 
@@ -68,10 +76,36 @@ The figure will be saved to out.png.
   different layer by setting `-l LAYER` or `num_layers=LAYER`. To tune the best layer for your custom model, please follow the instructions in [tune_layers](tune_layers) folder.
 * __Limitation__: Because CodeReviewer with learned positional embeddings are pre-trained on sentences with max length 512, Our Semantic-based retriever is undefined between sentences longer than 510 (512 after adding \[CLS\] and \[SEP\] tokens). The sentences longer than this will be truncated. 
 
+## Cite us
+
+### BibTeX
+
+```
+@inproceedings{10.1145/3650212.3680305,
+author = {Li, Kaixuan and Zhang, Jian and Chen, Sen and Liu, Han and Liu, Yang and Chen, Yixiang},
+title = {PatchFinder: A Two-Phase Approach to Security Patch Tracing for Disclosed Vulnerabilities in Open-Source Software},
+year = {2024},
+isbn = {9798400706127},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3650212.3680305},
+doi = {10.1145/3650212.3680305},
+booktitle = {Proceedings of the 33rd ACM SIGSOFT International Symposium on Software Testing and Analysis},
+pages = {590–602},
+numpages = {13},
+keywords = {Large language models, Patch ranking, Security patches},
+location = {Vienna, Austria},
+series = {ISSTA 2024}
+}
+```
 
 ### Acknowledgements
 
 This repo wouldn't be possible without the awesome [BertScore](https://github.com/Tiiiger/bert_score), [CodeReviewer](https://huggingface.co/microsoft/codereviewer), [fairseq](https://github.com/pytorch/fairseq), and [transformers](https://github.com/huggingface/transformers).
 
+
+## Website
+
+More details can be found on our [website](https://sites.google.com/view/issta2024-patchfinder/home). 
 
 
